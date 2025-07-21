@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ErrorLoggerFilter } from './common/error-logger.filter';
 // If you haven't already, run: npm install @nestjs/swagger swagger-ui-express
 
 async function bootstrap() {
@@ -14,6 +15,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useGlobalFilters(new ErrorLoggerFilter());
 
   // Swagger setup
   const config = new DocumentBuilder()

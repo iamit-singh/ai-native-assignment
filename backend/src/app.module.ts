@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
@@ -7,6 +7,7 @@ import { Sku } from './entities/sku.entity';
 import { CategoryModule } from './category.module';
 import { ProductModule } from './product.module';
 import { SkuModule } from './sku.module';
+import { RbacMiddleware } from './common/rbac.middleware';
 
 @Module({
   imports: [
@@ -30,4 +31,8 @@ import { SkuModule } from './sku.module';
   // controllers: [AppController],
   // providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RbacMiddleware).forRoutes('*');
+  }
+}

@@ -12,7 +12,7 @@
   - Query parameter validation with DTO and ValidationPipe
   - Consistent, production-grade code structure |
 | 005     | API Documentation and Testing                 | [ ] Not Started |                      |
-| 006     | Error Logging and RBAC Middleware Stub        | [ ] Not Started |                      |
+| 006     | Error Logging and RBAC Middleware Stub        | [x] Completed | - [x] 006 Error Logging and RBAC Middleware Stub: Implemented production-grade Winston file-based error logging with daily rotation, integrated with NestJS global error handling. Added a stub RBAC middleware and registered it globally for future role-based access control. |
 
 > Update the Status column with:
 > - [ ] Not Started
