@@ -15,7 +15,7 @@ const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'inventory',
   entities: [Category, Product, Sku],
   synchronize: true,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+  ssl: { rejectUnauthorized: false }
 });
 
 async function seed() {
