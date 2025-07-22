@@ -70,12 +70,53 @@ describe('ProductService', () => {
       expect(result.data).toHaveLength(1);
       expect(result.total).toBe(1);
     });
+    it('should filter by name', async () => {
+      const qb: any = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([[{ id: 1 }], 1]),
+      };
+      mockProductRepo.createQueryBuilder.mockReturnValue(qb);
+      await service.findAll({ name: 'test' } as any);
+      expect(qb.andWhere).toHaveBeenCalledWith('LOWER(product.name) LIKE :name', expect.anything());
+    });
+    it('should filter by categoryId', async () => {
+      const qb: any = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([[{ id: 1 }], 1]),
+      };
+      mockProductRepo.createQueryBuilder.mockReturnValue(qb);
+      await service.findAll({ categoryId: 'catid' } as any);
+      expect(qb.andWhere).toHaveBeenCalledWith('product.categoryId = :categoryId', expect.anything());
+    });
+    it('should handle custom page and pageSize', async () => {
+      const qb: any = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        getManyAndCount: jest.fn().mockResolvedValue([[{ id: 1 }], 1]),
+      };
+      mockProductRepo.createQueryBuilder.mockReturnValue(qb);
+      await service.findAll({ page: 2, pageSize: 5 } as any);
+      expect(qb.skip).toHaveBeenCalledWith(5);
+      expect(qb.take).toHaveBeenCalledWith(5);
+    });
   });
 
   describe('findOne', () => {
     it('should return a product', async () => {
       mockProductRepo.findOne.mockResolvedValue({ id: '1' });
       expect(await service.findOne('1')).toEqual({ id: '1' });
+    });
+    it('should return null if not found', async () => {
+      mockProductRepo.findOne.mockResolvedValue(null);
+      expect(await service.findOne('bad')).toBeNull();
     });
   });
 
@@ -98,6 +139,14 @@ describe('ProductService', () => {
       await expect(
         service.update('1', { categoryId: 'bad' } as any),
       ).rejects.toThrow();
+    });
+    it('should update if categoryId is not provided', async () => {
+      mockProductRepo.findOne.mockResolvedValue({ id: '1' });
+      mockProductRepo.save.mockResolvedValue({ id: '1', name: 'Updated' });
+      expect(await service.update('1', { name: 'Updated' } as any)).toEqual({
+        id: '1',
+        name: 'Updated',
+      });
     });
   });
 
