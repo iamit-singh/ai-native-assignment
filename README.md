@@ -46,21 +46,24 @@ A production-grade backend system for managing product categories, products, and
    npm install
    ```
 3. **Configure environment**
-   - Copy `.env.example` to `.env` and set DB connection and other variables
+   - Copy `backend/.env.example` to `backend/.env` and set DB connection and other variables
 4. **Set up the database**
    - Ensure PostgreSQL is running and the target database exists
 5. **Run migrations (if any)**
    - (Handled by TypeORM on app start if configured)
-6. **Start the server**
+6. **Seed sample data**
+```bash
+npm run seed
+```
+7. **Start the server**
    ```bash
+   npm run start
+   # or for dev
    npm run start:dev
    # or for production
    npm run start:prod
    ```
-7. **Seed sample data**
-   ```bash
-   npm run seed
-   ```
+
 
 ### Testing
 - **Unit tests**: `npm run test`
